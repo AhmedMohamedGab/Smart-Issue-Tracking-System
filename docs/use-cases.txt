@@ -1,0 +1,61 @@
+Use Cases Specification
+=======================
+This document outlines various use cases for the Smart Issue Tracking application.
+
+
+1. Create Project
+---------------------
+- Actor: Manager, Admin
+- Preconditions: Actor is authenticated.
+- Main Flow:
+  1. Actor selects "Create Project".
+  2. Actor enters project name and description.
+  3. System validates input.
+  4. System creates a new project.
+- Postconditions: Project is available for issue creation.
+
+
+2. Create Issue
+---------------------
+- Actor: Manager
+- Preconditions: Project exists.
+- Main Flow:
+  1. Manager selects a project.
+  2. Manager enters issue details (title, description, priority, due date).
+  3. System creates the issue with status Open.
+- Postconditions: Issue is associated with the selected project.
+
+
+3. Assign Issue
+---------------------
+- Actor: Manager
+- Preconditions:
+  1. Project exists.
+  2. Developer exists.
+- Main Flow:
+  1. Manager selects an issue.
+  2. Manager selects a developer.
+  3. System assigns the issue.
+  4. System updates issue status to In Progress.
+- Postconditions: Issue is assigned to the developer.
+
+
+4. Update Issue Status
+---------------------
+- Actor: Developer
+- Preconditions: Issue is assigned to the developer.
+- Main Flow:
+  1. Developer selects assigned issue.
+  2. Developer selects new status.
+  3. System validates transition.
+  4. System updates issue status.
+- Postconditions: Issue status is updated.
+
+
+5. View Reports
+---------------------
+- Actor: Manager, Admin
+- Main Flow:
+  1. Actor selects report type.
+  2. System retrieves data.
+  3. System displays report results.
