@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using SmartIssueTrackingSystem.src.Domain.Entities;
+﻿using SmartIssueTrackingSystem.src.Domain.Entities;
 
 namespace SmartIssueTrackingSystem.src.Infrastructure.Interfaces
 {
     public interface IUserRepository : IRepository<User>
     {
+        User? GetByEmail(string email);
     }
 }
