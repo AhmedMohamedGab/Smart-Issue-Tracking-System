@@ -17,6 +17,11 @@
             StartDate = DateTime.UtcNow;
         }
 
+        internal void Rename(string newName)
+        {
+            Name = newName ?? throw new ArgumentNullException(nameof(newName));
+        }
+
         internal void End()
         {
             EndDate = DateTime.UtcNow;

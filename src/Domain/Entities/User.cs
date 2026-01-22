@@ -2,16 +2,17 @@
 
 namespace SmartIssueTrackingSystem.src.Domain.Entities
 {
-    public abstract class User : BaseEntity
+    public class User : BaseEntity
     {
         public string Name { get; private set; }
         public string Email { get; private set; }
-        public UserRole Role { get; protected set; }
+        public UserRole Role { get; private set; }
 
-        protected User(string name, string email)
+        public User(string name, string email, UserRole role)
         {
             Name = name ?? throw new ArgumentNullException(nameof(name));
             Email = email ?? throw new ArgumentNullException(nameof(email));
+            Role = role;
         }
     }
 }

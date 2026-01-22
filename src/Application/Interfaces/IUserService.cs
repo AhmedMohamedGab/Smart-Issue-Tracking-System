@@ -1,6 +1,15 @@
-﻿namespace SmartIssueTrackingSystem.src.Application.Interfaces
+﻿using SmartIssueTrackingSystem.src.Domain.Entities;
+using SmartIssueTrackingSystem.src.Domain.Enums;
+
+namespace SmartIssueTrackingSystem.src.Application.Interfaces
 {
     public interface IUserService
     {
+        User CreateUser(string name, string email, UserRole role, User currentUser);
+
+        IEnumerable<User> GetAllUsers();
+        User GetById(Guid userId);
+        User GetByEmail(string email);
+        IEnumerable<User> GetDevelopers();
     }
 }

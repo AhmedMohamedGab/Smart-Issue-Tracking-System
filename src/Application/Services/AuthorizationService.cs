@@ -3,29 +3,34 @@ using SmartIssueTrackingSystem.src.Domain.Entities;
 
 namespace SmartIssueTrackingSystem.src.Application.Services
 {
-    public class ProjectService : IProjectService
+    public class AuthorizationService : IAuthorizationService
     {
-        public Project CreateProject(string name, string description, User currentUser)
+        public void EnsureCanAssignIssue(User user)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Project> GetAllProjects()
+        public void EnsureCanChangeIssueStatus(User user, Issue issue)
         {
             throw new NotImplementedException();
         }
 
-        public Project GetById(Guid projectId)
+        public void EnsureCanCreateIssue(User user)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Project> GetProjectsManagedBy(Guid managerId)
+        public void EnsureCanCreateProject(User user)
         {
             throw new NotImplementedException();
         }
 
-        public void RenameProject(Guid projectId, string newName, User currentUser)
+        public void EnsureCanCreateUser(User user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void EnsureCanManageProject(User user, Project project)
         {
             throw new NotImplementedException();
         }
