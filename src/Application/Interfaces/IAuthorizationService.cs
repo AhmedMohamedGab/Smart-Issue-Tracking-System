@@ -10,7 +10,8 @@ namespace SmartIssueTrackingSystem.src.Application.Interfaces
         void EnsureCanManageProject(User user, Project project);
 
         void EnsureCanCreateIssue(User user);
-        void EnsureCanAssignIssue(User user);
+        void EnsureCanCloseIssue(User user, Issue issue);
+        void EnsureCanAssignIssue(User user, Issue issue);
         void EnsureCanChangeIssueStatus(User user, Issue issue);
     }
 }

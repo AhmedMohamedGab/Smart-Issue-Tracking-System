@@ -1,28 +1,37 @@
 ﻿using SmartIssueTrackingSystem.src.Application.Interfaces;
 using SmartIssueTrackingSystem.src.Domain.Entities;
+using SmartIssueTrackingSystem.src.Infrastructure.Interfaces;
 
 namespace SmartIssueTrackingSystem.src.Application.Services
 {
     public class AuthenticationService : IAuthenticationService
     {
-        public User GetCurrentUser()
-        {
-            throw new NotImplementedException();
-        }
+        private User? _currentUser;
+        private readonly IUserRepository _userRepository;
 
-        public bool IsAuthenticated()
+        public AuthenticationService(IUserRepository userRepository)
         {
-            throw new NotImplementedException();
+            _userRepository = userRepository;
         }
 
         public User Login(string email)
         {
-            throw new NotImplementedException();
+            var user = _userRepository.GetByEmail(email);
+
+            if (user is null)
+                throw new Exception("User not found.");
+
+            _currentUser = user;
+            return user;
         }
 
         public void Logout()
-        {
-            throw new NotImplementedException();
-        }
+            => _currentUser = null;
+
+        public User GetCurrentUser()
+            => _currentUser ?? throw new Exception("No user is currently logged in.");
+
+        public bool IsAuthenticated()
+            => _currentUser is not null;
     }
 }
