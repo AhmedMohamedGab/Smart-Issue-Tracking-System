@@ -4,6 +4,6 @@ namespace SmartIssueTrackingSystem.src.Infrastructure.Interfaces
 {
     public interface IProjectRepository : IRepository<Project>
     {
-        IEnumerable<Project> GetByCreator(Guid creatorId);
+        IEnumerable<Project> GetByManager(Guid managerId);
     }
 }

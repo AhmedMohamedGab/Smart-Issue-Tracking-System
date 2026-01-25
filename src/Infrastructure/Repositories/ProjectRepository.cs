@@ -7,7 +7,7 @@ namespace SmartIssueTrackingSystem.src.Infrastructure.Repositories
     {
         protected override string FilePath => "projects.json";
 
-        public IEnumerable<Project> GetByCreator(Guid creatorId)
-            => _items.Where(p => p.CreatorId == creatorId);
+        public IEnumerable<Project> GetByManager(Guid managerId)
+            => _items.Where(p => p.ManagerId == managerId);
     }
 }

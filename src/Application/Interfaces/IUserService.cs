@@ -5,11 +5,12 @@ namespace SmartIssueTrackingSystem.src.Application.Interfaces
 {
     public interface IUserService
     {
-        User CreateUser(string name, string email, UserRole role, User currentUser);
+        User CreateUser(string name, string email, UserRole role);
+        void EditInfo(string name, string email, User currentUser);
 
         IEnumerable<User> GetAllUsers();
-        User GetById(Guid userId);
-        User GetByEmail(string email);
+        User? GetById(Guid userId);
+        User? GetByEmail(string email);
         IEnumerable<User> GetDevelopers();
     }
 }

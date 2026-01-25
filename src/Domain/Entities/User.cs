@@ -14,5 +14,11 @@ namespace SmartIssueTrackingSystem.src.Domain.Entities
             Email = email ?? throw new ArgumentNullException(nameof(email));
             Role = role;
         }
+
+        public void EditInfo(string name, string email)
+        {
+            Name = name ?? throw new ArgumentNullException(nameof(name));
+            Email = email ?? throw new ArgumentNullException(nameof(email));
+        }
     }
 }

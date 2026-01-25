@@ -1,33 +1,54 @@
 ﻿using SmartIssueTrackingSystem.src.Application.Interfaces;
 using SmartIssueTrackingSystem.src.Domain.Entities;
+using SmartIssueTrackingSystem.src.Infrastructure.Interfaces;
 
 namespace SmartIssueTrackingSystem.src.Application.Services
 {
     public class ProjectService : IProjectService
     {
-        public Project CreateProject(string name, string description, User currentUser)
+        private readonly IProjectRepository _projectRepo;
+        private readonly IUserRepository _userRepo;
+        private readonly IAuthorizationService _auth;
+
+        public ProjectService(
+            IProjectRepository projectRepository,
+            IUserRepository userRepository,
+            IAuthorizationService auth)
         {
-            throw new NotImplementedException();
+            _projectRepo = projectRepository;
+            _userRepo = userRepository;
+            _auth = auth;
         }
 
-        public IEnumerable<Project> GetAllProjects()
+        public Project CreateProject(string name, string description, string ManagerEmail)
         {
-            throw new NotImplementedException();
-        }
+            var manager = _userRepo.GetByEmail(ManagerEmail);
+            if (manager is null)
+                throw new InvalidOperationException("Manager with the specified email does not exist.");
 
-        public Project GetById(Guid projectId)
-        {
-            throw new NotImplementedException();
-        }
+            var newProject = new Project(name, description, manager.Id);
+            _projectRepo.Add(newProject);
 
-        public IEnumerable<Project> GetProjectsManagedBy(Guid managerId)
-        {
-            throw new NotImplementedException();
+            return newProject;
         }
 
         public void RenameProject(Guid projectId, string newName, User currentUser)
         {
-            throw new NotImplementedException();
+            var project = _projectRepo.GetById(projectId) ?? throw new InvalidOperationException("Project not found.");
+
+            _auth.EnsureCanManageProject(project, currentUser);
+
+            project.Rename(newName);
+            _projectRepo.Update(project);
         }
+
+        public IEnumerable<Project> GetAllProjects()
+            => _projectRepo.GetAll();
+
+        public Project? GetById(Guid projectId)
+            => _projectRepo.GetById(projectId) ?? throw new InvalidOperationException("Project not found.");
+
+        public IEnumerable<Project> GetProjectsManagedBy(Guid managerId)
+            => _projectRepo.GetByManager(managerId);
     }
 }

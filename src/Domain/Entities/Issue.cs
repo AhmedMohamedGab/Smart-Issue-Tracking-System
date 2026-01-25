@@ -36,18 +36,19 @@ namespace SmartIssueTrackingSystem.src.Domain.Entities
 
         internal void AssignTo(Guid developerId)
         {
-            if (Status == IssueStatus.Done)
+            if (Status == IssueStatus.Done || Status == IssueStatus.Closed)
                 throw new InvalidOperationException("Cannot assign a completed issue");
 
             AssigneeId = developerId;
             if (Status == IssueStatus.Open)
-            {
                 Status = IssueStatus.InProgress;
-            }
         }
 
         internal void ChangeStatus(IssueStatus newStatus)
         {
+            if (Status == IssueStatus.Closed)
+                throw new InvalidOperationException("Closed issues cannot be changed");
+
             Status = newStatus;
 
             if (newStatus == IssueStatus.Done)

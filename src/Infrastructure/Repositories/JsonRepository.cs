@@ -37,12 +37,8 @@ namespace SmartIssueTrackingSystem.src.Infrastructure.Repositories
 
         public virtual void Add(T entity)
         {
-            var item = _items.FirstOrDefault(e => e.Id == entity.Id);
-            if (item is null)
-            {
-                _items.Add(entity);
-                Save();
-            }
+            _items.Add(entity);
+            Save();
         }
 
         public virtual void Remove(Guid id)
