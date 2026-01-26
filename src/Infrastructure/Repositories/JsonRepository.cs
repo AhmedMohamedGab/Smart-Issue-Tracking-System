@@ -43,13 +43,13 @@ namespace SmartIssueTrackingSystem.src.Infrastructure.Repositories
 
         public virtual void Remove(Guid id)
         {
-            _items.RemoveAll(e => e.Id == id);
+            _items.RemoveAll(item => item.Id == id);
             Save();
         }
 
         public virtual void Update(T entity)
         {
-            var index = _items.FindIndex(e => e.Id == entity.Id);
+            var index = _items.FindIndex(item => item.Id == entity.Id);
             if (index != -1)
             {
                 _items[index] = entity;
@@ -58,7 +58,7 @@ namespace SmartIssueTrackingSystem.src.Infrastructure.Repositories
         }
 
         public T? GetById(Guid id)
-            => _items.FirstOrDefault(e => e.Id == id);
+            => _items.FirstOrDefault(item => item.Id == id);
 
         public IEnumerable<T> GetAll()
             => _items.AsReadOnly();

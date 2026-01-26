@@ -22,6 +22,11 @@
             Name = newName ?? throw new ArgumentNullException(nameof(newName));
         }
 
+        internal void AssignTo(Guid managerId)
+        {
+            ManagerId = managerId;
+        }
+
         internal void End()
         {
             EndDate = DateTime.UtcNow;

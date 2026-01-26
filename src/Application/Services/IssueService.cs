@@ -8,19 +8,19 @@ namespace SmartIssueTrackingSystem.src.Application.Services
     public class IssueService : IIssueService
     {
         private readonly IIssueRepository _issueRepo;
-        private readonly IUserRepository _userRepo;
-        private readonly IProjectRepository _projectRepo;
+        private readonly IUserService _userService;
+        private readonly IProjectService _projectService;
         private readonly IAuthorizationService _auth;
 
         public IssueService(
             IIssueRepository issueRepository,
-            IUserRepository userRepository,
-            IProjectRepository projectRepository,
+            IUserService userService,
+            IProjectService projectService,
             IAuthorizationService authorizationService)
         {
             _issueRepo = issueRepository;
-            _userRepo = userRepository;
-            _projectRepo = projectRepository;
+            _userService = userService;
+            _projectService = projectService;
             _auth = authorizationService;
         }
 
@@ -38,20 +38,41 @@ namespace SmartIssueTrackingSystem.src.Application.Services
             return newIssue;
         }
 
+        public void AssignManager(Guid issueId, Guid newManagerId, User currentUser)
+        {
+            var issue = GetById(issueId);
+            _userService.GetById(newManagerId);    // Ensure the new manager exists
+
+            _auth.EnsureCanManageIssue(issue, currentUser);
+
+            issue.AssignManager(newManagerId);
+            _issueRepo.Update(issue);
+        }
+
         public void AssignIssue(Guid issueId, string developerEmail, User currentUser)
         {
-            var issue = _issueRepo.GetById(issueId) ?? throw new InvalidOperationException("Issue not found");
-            var developer = _userRepo.GetByEmail(developerEmail) ?? throw new InvalidOperationException("Developer not found");
+            var issue = GetById(issueId);
+            var developer = _userService.GetByEmail(developerEmail);
 
-            _auth.EnsureCanAssignIssue(issue, currentUser);
+            _auth.EnsureCanManageIssue(issue, currentUser);
 
             issue.AssignTo(developer.Id);
             _issueRepo.Update(issue);
         }
 
+        public void UnassignIssue(Guid issueId, User currentUser)
+        {
+            var issue = GetById(issueId);
+
+            _auth.EnsureCanManageIssue(issue, currentUser);
+
+            issue.Unassign();
+            _issueRepo.Update(issue);
+        }
+
         public void ChangeStatus(Guid issueId, IssueStatus newStatus, User currentUser)
         {
-            var issue = _issueRepo.GetById(issueId) ?? throw new InvalidOperationException("Issue not found");
+            var issue = GetById(issueId);
 
             _auth.EnsureCanChangeIssueStatus(issue, currentUser);
 
@@ -61,9 +82,9 @@ namespace SmartIssueTrackingSystem.src.Application.Services
 
         public void ChangeDuedate(Guid issueId, DateTime newDuedate, User currentUser)
         {
-            var issue = _issueRepo.GetById(issueId) ?? throw new InvalidOperationException("Issue not found");
+            var issue = GetById(issueId);
 
-            _auth.EnsureCanChangeIssueDuedate(issue, currentUser);
+            _auth.EnsureCanManageIssue(issue, currentUser);
 
             issue.ChangeDueDate(newDuedate);
             _issueRepo.Update(issue);
@@ -71,30 +92,47 @@ namespace SmartIssueTrackingSystem.src.Application.Services
 
         public void CloseIssue(Guid issueId, User currentUser)
         {
-            var issue = _issueRepo.GetById(issueId) ?? throw new InvalidOperationException("Issue not found");
+            var issue = GetById(issueId);
 
-            _auth.EnsureCanCloseIssue(issue, currentUser);
+            _auth.EnsureCanManageIssue(issue, currentUser);
 
             issue.ChangeStatus(IssueStatus.Closed);
             _issueRepo.Update(issue);
         }
 
-        public Issue? GetById(Guid issueId)
+        public void DeleteIssue(Guid issueId, User currentUser)
+        {
+            var issue = GetById(issueId);
+
+            _auth.EnsureCanManageIssue(issue, currentUser);
+
+            _issueRepo.Remove(issueId);
+        }
+
+        public Issue GetById(Guid issueId)
             => _issueRepo.GetById(issueId) ?? throw new InvalidOperationException("Issue not found");
 
         public IEnumerable<Issue> GetByProject(Guid projectId, User currentUser)
         {
-            var project = _projectRepo.GetById(projectId) ?? throw new InvalidOperationException("Project not found");
+            var project = _projectService.GetById(projectId);
 
             _auth.EnsureCanViewProjectIssues(project, currentUser);
 
             return _issueRepo.GetByProject(projectId);
         }
 
+        public IEnumerable<Issue> GetByManager(Guid managerId)
+            => _issueRepo.GetByManager(managerId);
+
+        public IEnumerable<Issue> GetByDeveloper(Guid developerId)
+            => _issueRepo.GetByDeveloper(developerId);
+
         public IDictionary<string, IEnumerable<Issue>> GetForManager(Guid managerId)
         {
             var managerIssues = _issueRepo.GetByManager(managerId);
-            var managerProjects = _projectRepo.GetByManager(managerId).Select(p => new { Id = p.Id, Name = p.Name });
+            var managerProjects = _projectService
+                .GetProjectsManagedBy(managerId)
+                .Select(proj => new { proj.Id, proj.Name });
 
             var managerIssuesGroupedByProjectNames = managerProjects.ToDictionary(
                 proj => proj.Name,
@@ -107,7 +145,7 @@ namespace SmartIssueTrackingSystem.src.Application.Services
         public IDictionary<string, IEnumerable<Issue>> GetByAssignee(Guid managerId)
         {
             var managerIssues = _issueRepo.GetByManager(managerId);
-            var developers = _userRepo.GetAll().Where(u => u.Role == UserRole.Developer);
+            var developers = _userService.GetDevelopers();
 
             var managerIssuesGroupedByDeveloperEmails = developers.GroupJoin(
                 managerIssues,
@@ -115,8 +153,8 @@ namespace SmartIssueTrackingSystem.src.Application.Services
                 issue => issue.AssigneeId,
                 (dev, issues) => new { DeveloperEmail = dev.Email, Issues = issues }
             ).ToDictionary(
-                g => g.DeveloperEmail,
-                g => g.Issues
+                group => group.DeveloperEmail,
+                group => group.Issues
             );
 
             return managerIssuesGroupedByDeveloperEmails;
@@ -125,7 +163,7 @@ namespace SmartIssueTrackingSystem.src.Application.Services
         public IDictionary<string, IEnumerable<Issue>> GetForDeveloper(Guid developerId)
         {
             var developerIssues = _issueRepo.GetByDeveloper(developerId);
-            var projects = _projectRepo.GetAll();
+            var projects = _projectService.GetAllProjects();
 
             var developerIssuesGroupedByProjectNames = projects.GroupJoin(
                 developerIssues,
@@ -133,58 +171,35 @@ namespace SmartIssueTrackingSystem.src.Application.Services
                 issue => issue.ProjectId,
                 (proj, issues) => new { ProjectName = proj.Name, Issues = issues }
             ).ToDictionary(
-                g => g.ProjectName,
-                g => g.Issues
+                group => group.ProjectName,
+                group => group.Issues
             );
 
             return developerIssuesGroupedByProjectNames;
         }
 
         public IDictionary<string, IEnumerable<Issue>> GetByStatus(Guid managerId)
-        {
-            var managerIssues = _issueRepo.GetByManager(managerId);
-
-            var managerIssuesGroupedByStatus = managerIssues
+            => _issueRepo.GetByManager(managerId)
                 .GroupBy(issue => issue.Status)
                 .ToDictionary(
-                    g => g.Key.ToString(),
-                    g => g.AsEnumerable()
+                    group => group.Key.ToString(),
+                    group => group.AsEnumerable()
                 );
-
-            return managerIssuesGroupedByStatus;
-        }
 
         public IDictionary<string, IEnumerable<Issue>> GetByPriority(Guid managerId)
-        {
-            var managerIssues = _issueRepo.GetByManager(managerId);
-
-            var managerIssuesGroupedByPriority = managerIssues
+            => _issueRepo.GetByManager(managerId)
                 .GroupBy(issue => issue.Priority)
                 .ToDictionary(
-                    g => g.Key.ToString(),
-                    g => g.AsEnumerable()
+                    group => group.Key.ToString(),
+                    group => group.AsEnumerable()
                 );
 
-            return managerIssuesGroupedByPriority;
-        }
-
         public IEnumerable<Issue> GetIncompleteIssues(Guid managerId)
-        {
-            var managerIssues = _issueRepo.GetByManager(managerId);
-
-            var incompleteIssues = managerIssues.Where(i => i.CompletedAt is null);
-
-            return incompleteIssues;
-
-        }
+            => _issueRepo.GetByManager(managerId)
+                .Where(i => i.CompletedAt is null);
 
         public IEnumerable<Issue> GetOverdueIssues(Guid managerId)
-        {
-            var managerIssues = _issueRepo.GetByManager(managerId);
-
-            var overdueIssues = managerIssues.Where(i => i.DueDate < DateTime.UtcNow && i.CompletedAt is null);
-
-            return overdueIssues;
-        }
+            => _issueRepo.GetByManager(managerId)
+                .Where(i => i.DueDate < DateTime.UtcNow && i.CompletedAt is null);
     }
 }

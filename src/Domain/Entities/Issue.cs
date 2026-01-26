@@ -34,20 +34,37 @@ namespace SmartIssueTrackingSystem.src.Domain.Entities
             Status = IssueStatus.Open;
         }
 
+        internal void AssignManager(Guid managerId)
+        {
+            if (Status == IssueStatus.Closed)
+                throw new InvalidOperationException("Cannot assign a closed issue.");
+
+            ManagerId = managerId;
+        }
+
         internal void AssignTo(Guid developerId)
         {
-            if (Status == IssueStatus.Done || Status == IssueStatus.Closed)
-                throw new InvalidOperationException("Cannot assign a completed issue");
+            if (Status == IssueStatus.Closed)
+                throw new InvalidOperationException("Cannot assign a closed issue.");
 
             AssigneeId = developerId;
             if (Status == IssueStatus.Open)
                 Status = IssueStatus.InProgress;
         }
 
+        internal void Unassign()
+        {
+            if (Status == IssueStatus.Closed)
+                throw new InvalidOperationException("Cannot unassign a closed issue.");
+
+            AssigneeId = default;
+            Status = IssueStatus.Open;
+        }
+
         internal void ChangeStatus(IssueStatus newStatus)
         {
             if (Status == IssueStatus.Closed)
-                throw new InvalidOperationException("Closed issues cannot be changed");
+                throw new InvalidOperationException("Closed issues cannot be changed.");
 
             Status = newStatus;
 
@@ -57,10 +74,21 @@ namespace SmartIssueTrackingSystem.src.Domain.Entities
 
         internal void ChangeDueDate(DateTime newDueDate)
         {
+            if (Status == IssueStatus.Done || Status == IssueStatus.Closed)
+                throw new InvalidOperationException("Cannot set due date to a completed issue.");
+
             if (newDueDate < DateTime.UtcNow)
-                throw new InvalidOperationException("Cannot set due date in the past");
+                throw new InvalidOperationException("Cannot set due date in the past.");
 
             DueDate = newDueDate;
+        }
+
+        internal bool IsOverdue()
+        {
+            if (DueDate < DateTime.UtcNow && !(Status == IssueStatus.Done || Status == IssueStatus.Closed))
+                return true;
+
+            return false;
         }
     }
 }

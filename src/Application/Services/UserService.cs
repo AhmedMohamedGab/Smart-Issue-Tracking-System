@@ -28,17 +28,22 @@ namespace SmartIssueTrackingSystem.src.Application.Services
             _userRepo.Update(currentUser);
         }
 
+        public void DeleteUser(Guid userId)
+        {
+            GetById(userId);    // Ensure user exists
+            _userRepo.Remove(userId);
+        }
+
         public IEnumerable<User> GetAllUsers()
             => _userRepo.GetAll();
 
-        public User? GetById(Guid userId)
+        public User GetById(Guid userId)
             => _userRepo.GetById(userId) ?? throw new InvalidOperationException("User not found.");
 
-        public User? GetByEmail(string email)
+        public User GetByEmail(string email)
             => _userRepo.GetByEmail(email) ?? throw new InvalidOperationException("User not found.");
 
         public IEnumerable<User> GetDevelopers()
-            => _userRepo.GetAll()
-            .Where(u => u.Role == UserRole.Developer);
+            => _userRepo.GetDevelopers();
     }
 }
