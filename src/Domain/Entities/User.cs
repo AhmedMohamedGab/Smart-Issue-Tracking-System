@@ -17,8 +17,8 @@ namespace SmartIssueTrackingSystem.src.Domain.Entities
 
         public void EditInfo(string name, string email)
         {
-            Name = name ?? throw new ArgumentNullException(nameof(name));
-            Email = email ?? throw new ArgumentNullException(nameof(email));
+            Name = name;
+            Email = email;
         }
     }
 }

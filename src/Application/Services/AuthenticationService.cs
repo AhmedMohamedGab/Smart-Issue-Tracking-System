@@ -1,28 +1,26 @@
 ﻿using SmartIssueTrackingSystem.src.Application.Interfaces;
 using SmartIssueTrackingSystem.src.Domain.Entities;
-using SmartIssueTrackingSystem.src.Infrastructure.Interfaces;
 
 namespace SmartIssueTrackingSystem.src.Application.Services
 {
     public class AuthenticationService : IAuthenticationService
     {
         private User? _currentUser;
-        private readonly IUserRepository _userRepository;
+        private readonly IUserService _userService;
 
-        public AuthenticationService(IUserRepository userRepository)
+        public AuthenticationService(IUserService userService)
         {
-            _userRepository = userRepository;
+            _userService = userService;
         }
 
-        public User Login(string email)
+        public void Login(string email)
         {
-            var user = _userRepository.GetByEmail(email);
+            var user = _userService.GetByEmail(email);
 
             if (user is null)
                 throw new Exception("User not found.");
 
             _currentUser = user;
-            return user;
         }
 
         public void Logout()

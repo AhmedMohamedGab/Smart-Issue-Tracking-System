@@ -14,12 +14,10 @@ namespace SmartIssueTrackingSystem.src.Application.Services
             _userRepo = userRepository;
         }
 
-        public User CreateUser(string name, string email, UserRole role)
+        public void CreateUser(string name, string email, int role)
         {
-            var newUser = new User(name, email, role);
+            var newUser = new User(name, email, (UserRole)role);
             _userRepo.Add(newUser);
-
-            return newUser;
         }
 
         public void EditInfo(string name, string email, User currentUser)

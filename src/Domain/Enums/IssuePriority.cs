@@ -2,7 +2,7 @@
 {
     public enum IssuePriority
     {
-        Low,
+        Low = 1,
         Medium,
         High,
         Critical
