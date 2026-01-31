@@ -5,16 +5,16 @@ namespace SmartIssueTrackingSystem.src.UI.Menus.Admin
     public class AdminUserMenuHandler : BaseMenuHandler, IMenuHandler
     {
         private readonly IUserService _userService;
-        private readonly IUserLifecycleService _userLifeCycle;
+        private readonly IUserLifecycleService _userLifecycle;
         private readonly IAuthenticationService _authService;
 
         public AdminUserMenuHandler(
             IUserService userService,
-            IUserLifecycleService userLifeCycle,
+            IUserLifecycleService userLifecycle,
             IAuthenticationService authService)
         {
             _userService = userService;
-            _userLifeCycle = userLifeCycle;
+            _userLifecycle = userLifecycle;
             _authService = authService;
         }
 
@@ -80,7 +80,7 @@ namespace SmartIssueTrackingSystem.src.UI.Menus.Admin
             Console.Write("User ID: ");
             string input1 = Console.ReadLine() ?? throw new ArgumentNullException("ID cannot be null.");
 
-            if (Guid.TryParse(input1, out Guid id1))
+            if (!Guid.TryParse(input1, out Guid id1))
             {
                 Console.WriteLine("Invalid ID.");
                 Pause();
@@ -93,7 +93,7 @@ namespace SmartIssueTrackingSystem.src.UI.Menus.Admin
                 Console.Write("Replacing manager ID: ");
                 string input2 = Console.ReadLine() ?? throw new ArgumentNullException("ID cannot be null.");
 
-                if (Guid.TryParse(input2, out id2))
+                if (!Guid.TryParse(input2, out id2))
                 {
                     Console.WriteLine("Invalid ID.");
                     Pause();
@@ -103,7 +103,7 @@ namespace SmartIssueTrackingSystem.src.UI.Menus.Admin
 
             var currentUser = _authService.GetCurrentUser();
 
-            _userLifeCycle.DeleteUser(id1, id2, currentUser);
+            _userLifecycle.DeleteUser(id1, id2, currentUser);
             Console.WriteLine("User deleted successfully.");
             Pause();
         }

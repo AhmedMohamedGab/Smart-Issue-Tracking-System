@@ -28,7 +28,7 @@ namespace SmartIssueTrackingSystem.src.Application.Services
             }
         }
 
-        public void ReassignManager(Guid projectId, Guid newManagerId, User currentUser)
+        public void ReassignProject(Guid projectId, Guid newManagerId, User currentUser)
         {
             var project = _projectService.GetById(projectId);
 
