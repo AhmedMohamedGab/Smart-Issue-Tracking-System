@@ -55,6 +55,7 @@ namespace SmartIssueTrackingSystem.src.UI.Menus.Admin
 
             _projectService.CreateProject(name, description, managerEmail);
             Console.WriteLine("Project created successfully.");
+
             Pause();
         }
 

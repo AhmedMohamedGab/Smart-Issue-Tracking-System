@@ -48,17 +48,21 @@ namespace SmartIssueTrackingSystem.src.UI.Menus
 
         private void EditInfo()
         {
-            Console.Write("Name: ");
-            string name = Console.ReadLine() ?? throw new ArgumentNullException("Name cannot be null.");
-
-            Console.Write("Email: ");
-            string email = Console.ReadLine() ?? throw new ArgumentNullException("Email cannot be null.");
-
             var currentUser = _authService.GetCurrentUser();
 
-            _userService.EditInfo(name, email, currentUser);
+            Console.WriteLine($"Name: {currentUser.Name}");
+            Console.WriteLine($"Email: {currentUser.Email}");
+            Console.WriteLine("---------------------");
 
+            Console.Write("Enter new name: ");
+            string name = Console.ReadLine() ?? throw new ArgumentNullException("Name cannot be null.");
+
+            Console.Write("Enter new email: ");
+            string email = Console.ReadLine() ?? throw new ArgumentNullException("Email cannot be null.");
+
+            _userService.EditInfo(name, email, currentUser);
             Console.WriteLine("Info updated successfully.");
+
             Pause();
         }
     }

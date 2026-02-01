@@ -15,7 +15,7 @@ namespace SmartIssueTrackingSystem.src.Application.Interfaces
         void AssignManager(Guid issueId, Guid newManagerId, User currentUser);
         void AssignIssue(Guid issueId, string developerEmail, User currentUser);
         void UnassignIssue(Guid issueId, User currentUser);
-        void ChangeStatus(Guid issueId, IssueStatus newStatus, User currentUser);
+        void ChangeStatus(Guid issueId, int newStatus, User currentUser);
         void ChangeDuedate(Guid issueId, DateTime newDuedate, User currentUser);
         void CloseIssue(Guid issueId, User currentUser);
         void DeleteIssue(Guid issueId, User currentUser);

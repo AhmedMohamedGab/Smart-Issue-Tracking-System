@@ -70,13 +70,13 @@ namespace SmartIssueTrackingSystem.src.Application.Services
             _issueRepo.Update(issue);
         }
 
-        public void ChangeStatus(Guid issueId, IssueStatus newStatus, User currentUser)
+        public void ChangeStatus(Guid issueId, int newStatus, User currentUser)
         {
             var issue = GetById(issueId);
 
             _auth.EnsureCanChangeIssueStatus(issue, currentUser);
 
-            issue.ChangeStatus(newStatus);
+            issue.ChangeStatus((IssueStatus)newStatus);
             _issueRepo.Update(issue);
         }
 

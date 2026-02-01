@@ -1,10 +1,127 @@
-﻿namespace SmartIssueTrackingSystem.src.UI.Menus
+﻿using SmartIssueTrackingSystem.src.Application.Interfaces;
+
+namespace SmartIssueTrackingSystem.src.UI.Menus
 {
     public class DeveloperMenuHandler : BaseMenuHandler, IMenuHandler
     {
+        private readonly IAuthenticationService _authService;
+        private readonly IUserService _userService;
+        private readonly IIssueService _issueService;
+        private readonly IReportingService _reportingService;
+
+        public DeveloperMenuHandler(
+            IAuthenticationService authService,
+            IUserService userService,
+            IIssueService issueService,
+            IReportingService reportingService)
+        {
+            _authService = authService;
+            _userService = userService;
+            _issueService = issueService;
+            _reportingService = reportingService;
+        }
+
         public void Show()
         {
-            throw new NotImplementedException();
+            while (true)
+            {
+                Clear();
+                Console.WriteLine("1. Edit my info");
+                Console.WriteLine("2. View my issues");
+                Console.WriteLine("3. Change issue status");
+                Console.WriteLine("4. View my workload");
+                Console.WriteLine("0. Logout");
+
+                switch (ReadChoice())
+                {
+                    case 1: EditInfo(); break;
+                    case 2: ViewIssues(); break;
+                    case 3: ChangeIssueStatus(); break;
+                    case 4: ViewWorkload(); break;
+                    case 0: _authService.Logout(); break;
+                    default:
+                        Console.WriteLine("Invalid choice. Please try again.");
+                        Pause();
+                        break;
+                }
+            }
+        }
+
+        private void EditInfo()
+        {
+            var currentUser = _authService.GetCurrentUser();
+
+            Console.WriteLine($"Name: {currentUser.Name}");
+            Console.WriteLine($"Email: {currentUser.Email}");
+            Console.WriteLine("---------------------");
+
+            Console.Write("Enter new name: ");
+            string name = Console.ReadLine() ?? throw new ArgumentNullException("Name cannot be null.");
+
+            Console.Write("Enter new email: ");
+            string email = Console.ReadLine() ?? throw new ArgumentNullException("Email cannot be null.");
+
+            _userService.EditInfo(name, email, currentUser);
+            Console.WriteLine("Info updated successfully.");
+
+            Pause();
+        }
+
+        private void ViewIssues()
+        {
+            var currentUser = _authService.GetCurrentUser();
+            var issueDictionary = _issueService.GetForDeveloper(currentUser.Id);
+
+            foreach (var item in issueDictionary)
+            {
+                Console.WriteLine(item.Key);
+                foreach (var issue in item.Value)
+                    Console.WriteLine(issue);
+            }
+
+            if (issueDictionary.Count == 0)
+                Console.WriteLine("No issues assigned.");
+
+            Pause();
+        }
+
+        private void ChangeIssueStatus()
+        {
+            Console.Write("Enter issue ID: ");
+            string input = Console.ReadLine() ?? throw new ArgumentNullException("ID cannot be null.");
+
+            if (!Guid.TryParse(input, out Guid issueId))
+            {
+                Console.WriteLine("Invalid ID.");
+                Pause();
+                return;
+            }
+
+            Console.Write("New status:\n1.In progress\n2.In review\n3.Done\n");
+            int newStatus = ReadChoice();
+            if (newStatus < 1 || newStatus > 3)
+            {
+                Console.WriteLine("Invalid status choice.");
+                Pause();
+                return;
+            }
+
+            var currentUser = _authService.GetCurrentUser();
+
+            _issueService.ChangeStatus(issueId, newStatus, currentUser);
+            Console.WriteLine("Issue status updated successfully.");
+
+            Pause();
+        }
+
+        private void ViewWorkload()
+        {
+            var currentUser = _authService.GetCurrentUser();
+
+            int workload = _reportingService.GetDeveloperWorkload(currentUser.Id);
+            Console.WriteLine($"You have {workload} issues assigned.");
+
+            Pause();
         }
     }
 }

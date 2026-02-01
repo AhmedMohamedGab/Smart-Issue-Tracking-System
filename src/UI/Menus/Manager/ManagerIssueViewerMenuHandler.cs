@@ -1,6 +1,6 @@
 ﻿namespace SmartIssueTrackingSystem.src.UI.Menus.Manager
 {
-    public class ManagerIssueMenuHandler
+    public class ManagerIssueViewerMenuHandler
     {
     }
 }

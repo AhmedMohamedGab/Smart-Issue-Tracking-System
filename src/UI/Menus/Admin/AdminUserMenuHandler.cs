@@ -63,6 +63,7 @@ namespace SmartIssueTrackingSystem.src.UI.Menus.Admin
 
             _userService.CreateUser(name, email, role);
             Console.WriteLine("User created successfully.");
+
             Pause();
         }
 
@@ -105,6 +106,7 @@ namespace SmartIssueTrackingSystem.src.UI.Menus.Admin
 
             _userLifecycle.DeleteUser(id1, id2, currentUser);
             Console.WriteLine("User deleted successfully.");
+
             Pause();
         }
 
