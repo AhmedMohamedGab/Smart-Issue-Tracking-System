@@ -4,18 +4,18 @@ namespace SmartIssueTrackingSystem.src.UI.Menus.Admin
 {
     public class AdminProjectMenuHandler : BaseMenuHandler, IMenuHandler
     {
+        private readonly IAuthenticationService _authService;
         private readonly IProjectService _projectService;
         private readonly IProjectLifecycleService _projectLifecycle;
-        private readonly IAuthenticationService _authService;
 
         public AdminProjectMenuHandler(
+            IAuthenticationService authService,
             IProjectService projectService,
-            IProjectLifecycleService projectLifecycle,
-            IAuthenticationService authService)
+            IProjectLifecycleService projectLifecycle)
         {
+            _authService = authService;
             _projectService = projectService;
             _projectLifecycle = projectLifecycle;
-            _authService = authService;
         }
 
         public void Show()

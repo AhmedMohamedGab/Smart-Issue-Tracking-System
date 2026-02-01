@@ -5,21 +5,21 @@ namespace SmartIssueTrackingSystem.src.UI.Menus
 {
     public class AdminMenuHandler : BaseMenuHandler, IMenuHandler
     {
-        private readonly AdminUserMenuHandler _userMenu;
-        private readonly AdminProjectMenuHandler _projectMenu;
         private readonly IAuthenticationService _authService;
         private readonly IUserService _userService;
+        private readonly AdminUserMenuHandler _userMenu;
+        private readonly AdminProjectMenuHandler _projectMenu;
 
         public AdminMenuHandler(
-            AdminUserMenuHandler userMenu,
-            AdminProjectMenuHandler projectMenu,
             IAuthenticationService authService,
-            IUserService userService)
+            IUserService userService,
+            AdminUserMenuHandler userMenu,
+            AdminProjectMenuHandler projectMenu)
         {
-            _userMenu = userMenu;
-            _projectMenu = projectMenu;
             _authService = authService;
             _userService = userService;
+            _userMenu = userMenu;
+            _projectMenu = projectMenu;
         }
 
         public void Show()
@@ -28,8 +28,8 @@ namespace SmartIssueTrackingSystem.src.UI.Menus
             {
                 Clear();
                 Console.WriteLine("1. Edit my info");
-                Console.WriteLine("2. Manage users");
-                Console.WriteLine("3. Manage projects");
+                Console.WriteLine("2. Users >");
+                Console.WriteLine("3. Projects >");
                 Console.WriteLine("0. Logout");
 
                 switch (ReadChoice())

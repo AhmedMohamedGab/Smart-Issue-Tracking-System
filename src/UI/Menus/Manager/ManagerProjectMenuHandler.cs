@@ -1,6 +1,10 @@
 ﻿namespace SmartIssueTrackingSystem.src.UI.Menus.Manager
 {
-    public class ManagerProjectMenuHandler
+    public class ManagerProjectMenuHandler : BaseMenuHandler, IMenuHandler
     {
+        public void Show()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
