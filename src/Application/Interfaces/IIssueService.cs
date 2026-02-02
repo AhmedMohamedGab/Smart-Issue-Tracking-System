@@ -1,5 +1,4 @@
 ﻿using SmartIssueTrackingSystem.src.Domain.Entities;
-using SmartIssueTrackingSystem.src.Domain.Enums;
 
 namespace SmartIssueTrackingSystem.src.Application.Interfaces
 {
@@ -8,7 +7,7 @@ namespace SmartIssueTrackingSystem.src.Application.Interfaces
         Issue CreateIssue(
             string title,
             string description,
-            IssuePriority priority,
+            int priority,
             DateTime dueDate,
             Guid managerId,
             Guid projectId);

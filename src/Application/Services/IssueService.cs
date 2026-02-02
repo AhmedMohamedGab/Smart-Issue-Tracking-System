@@ -27,12 +27,12 @@ namespace SmartIssueTrackingSystem.src.Application.Services
         public Issue CreateIssue(
             string title,
             string description,
-            IssuePriority priority,
+            int priority,
             DateTime dueDate,
             Guid managerId,
             Guid projectId)
         {
-            var newIssue = new Issue(title, description, priority, dueDate, managerId, projectId);
+            var newIssue = new Issue(title, description, (IssuePriority)priority, dueDate, managerId, projectId);
             _issueRepo.Add(newIssue);
 
             return newIssue;
