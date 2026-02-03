@@ -69,18 +69,18 @@ namespace SmartIssueTrackingSystem.src.UI.Menus
 
         private void ViewIssues()
         {
-            var currentUser = _authService.GetCurrentUser();
-            var issueDictionary = _issueService.GetForDeveloper(currentUser.Id);
+            Guid developerId = _authService.GetCurrentUser().Id;
+            var issueDictionary = _issueService.GetForDeveloper(developerId);
 
             foreach (var item in issueDictionary)
             {
-                Console.WriteLine(item.Key);
+                Console.WriteLine($"\n# Issues for project [{item.Key}] :");
                 foreach (var issue in item.Value)
                     Console.WriteLine(issue);
             }
 
             if (issueDictionary.Count == 0)
-                Console.WriteLine("No issues assigned.");
+                Console.WriteLine("\nNo issues assigned.");
 
             Pause();
         }
@@ -116,9 +116,9 @@ namespace SmartIssueTrackingSystem.src.UI.Menus
 
         private void ViewWorkload()
         {
-            var currentUser = _authService.GetCurrentUser();
+            Guid developerId = _authService.GetCurrentUser().Id;
 
-            int workload = _reportingService.GetDeveloperWorkload(currentUser.Id);
+            int workload = _reportingService.GetDeveloperWorkload(developerId);
             Console.WriteLine($"You have {workload} issues assigned.");
 
             Pause();
