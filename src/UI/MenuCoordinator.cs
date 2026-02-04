@@ -1,5 +1,4 @@
 ﻿using SmartIssueTrackingSystem.src.Application.Interfaces;
-using SmartIssueTrackingSystem.src.Domain.Enums;
 using SmartIssueTrackingSystem.src.UI.Menus;
 
 namespace SmartIssueTrackingSystem.src.UI
@@ -39,17 +38,17 @@ namespace SmartIssueTrackingSystem.src.UI
 
         private void RouteByRole()
         {
-            switch (_authService.GetCurrentUser().Role)
+            switch (_authService.GetCurrentUser().Role.ToString())
             {
-                case UserRole.Admin:
+                case "Admin":
                     _adminMenu.Show();
                     break;
 
-                case UserRole.Manager:
+                case "Manager":
                     _managerMenu.Show();
                     break;
 
-                case UserRole.Developer:
+                case "Developer":
                     _developerMenu.Show();
                     break;
             }

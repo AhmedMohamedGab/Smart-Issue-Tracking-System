@@ -10,8 +10,8 @@
 
         public Project(string name, string description, Guid managerId)
         {
-            Name = name ?? throw new ArgumentNullException(nameof(name));
-            Description = description ?? string.Empty;
+            Name = name;
+            Description = description;
             ManagerId = managerId;
 
             StartDate = DateTime.UtcNow;
@@ -19,7 +19,7 @@
 
         internal void Rename(string newName)
         {
-            Name = newName ?? throw new ArgumentNullException(nameof(newName));
+            Name = newName;
         }
 
         internal void AssignTo(Guid managerId)

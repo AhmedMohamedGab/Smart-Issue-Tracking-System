@@ -10,8 +10,8 @@ namespace SmartIssueTrackingSystem.src.Domain.Entities
 
         public User(string name, string email, UserRole role)
         {
-            Name = name ?? throw new ArgumentNullException(nameof(name));
-            Email = email ?? throw new ArgumentNullException(nameof(email));
+            Name = name;
+            Email = email;
             Role = role;
         }
 

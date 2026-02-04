@@ -24,8 +24,8 @@ namespace SmartIssueTrackingSystem.src.Domain.Entities
             Guid managerId,
             Guid projectId)
         {
-            Title = title ?? throw new ArgumentNullException(nameof(title));
-            Description = description ?? string.Empty;
+            Title = title;
+            Description = description;
             Priority = priority;
             DueDate = dueDate;
             ManagerId = managerId;
