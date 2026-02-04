@@ -4,7 +4,7 @@ namespace SmartIssueTrackingSystem.src.Application.Interfaces
 {
     public interface IIssueService
     {
-        Issue CreateIssue(
+        void CreateIssue(
             string title,
             string description,
             int priority,

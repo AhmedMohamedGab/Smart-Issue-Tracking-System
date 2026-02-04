@@ -20,14 +20,12 @@ namespace SmartIssueTrackingSystem.src.Application.Services
             _auth = auth;
         }
 
-        public Project CreateProject(string name, string description, string ManagerEmail)
+        public void CreateProject(string name, string description, string ManagerEmail)
         {
             var manager = _userService.GetByEmail(ManagerEmail);
 
             var newProject = new Project(name, description, manager.Id);
             _projectRepo.Add(newProject);
-
-            return newProject;
         }
 
         public void RenameProject(Guid projectId, string newName, User currentUser)

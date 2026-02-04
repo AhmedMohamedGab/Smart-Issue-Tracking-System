@@ -24,7 +24,7 @@ namespace SmartIssueTrackingSystem.src.Application.Services
             _auth = authorizationService;
         }
 
-        public Issue CreateIssue(
+        public void CreateIssue(
             string title,
             string description,
             int priority,
@@ -34,8 +34,6 @@ namespace SmartIssueTrackingSystem.src.Application.Services
         {
             var newIssue = new Issue(title, description, (IssuePriority)priority, dueDate, managerId, projectId);
             _issueRepo.Add(newIssue);
-
-            return newIssue;
         }
 
         public void AssignManager(Guid issueId, Guid newManagerId, User currentUser)

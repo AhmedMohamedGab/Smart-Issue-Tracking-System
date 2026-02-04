@@ -8,16 +8,6 @@ namespace SmartIssueTrackingSystem.src.Infrastructure.Repositories
     {
         protected override string FilePath => "users.json";
 
-        public override void Add(User newUser)
-        {
-            var user = GetByEmail(newUser.Email);
-
-            if (user is not null)
-                throw new InvalidOperationException("A user with this email already exists.");
-
-            base.Add(newUser);
-        }
-
         public User? GetByEmail(string email)
             => _items.FirstOrDefault(user => user.Email == email);
 
