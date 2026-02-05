@@ -16,10 +16,6 @@ namespace SmartIssueTrackingSystem.src.Application.Services
         public void Login(string email)
         {
             var user = _userService.GetByEmail(email);
-
-            if (user is null)
-                throw new Exception("User not found.");
-
             _currentUser = user;
         }
 

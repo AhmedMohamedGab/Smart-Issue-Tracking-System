@@ -55,9 +55,25 @@ namespace SmartIssueTrackingSystem.src.UI.Menus
         private void Login()
         {
             Console.Write("Enter your email: ");
-            string email = Console.ReadLine() ?? throw new ArgumentNullException("Email cannot be null.");
+            var email = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                Console.WriteLine("Invalid email. Please try again.");
+                Pause();
+                return;
+            }
 
-            _authService.Login(email);
+            try
+            {
+                _authService.Login(email);
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine(ex.Message);
+                Pause();
+                return;
+            }
+
             Console.WriteLine("You logged in successfully.");
 
             Pause();
