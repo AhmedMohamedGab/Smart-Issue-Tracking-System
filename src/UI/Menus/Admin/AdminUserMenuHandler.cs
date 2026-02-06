@@ -47,10 +47,22 @@ namespace SmartIssueTrackingSystem.src.UI.Menus.Admin
         private void CreateUser()
         {
             Console.Write("Name: ");
-            string name = Console.ReadLine() ?? throw new ArgumentNullException("Name cannot be null.");
+            var name = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                Console.WriteLine("Invalid name. Please try again.");
+                Pause();
+                return;
+            }
 
             Console.Write("Email: ");
-            string email = Console.ReadLine() ?? throw new ArgumentNullException("Email cannot be null.");
+            var email = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                Console.WriteLine("Invalid email. Please try again.");
+                Pause();
+                return;
+            }
 
             Console.Write("Role:\n1.Admin\n2.Manager\n3.Developer\n");
             int role = ReadChoice();
@@ -61,8 +73,15 @@ namespace SmartIssueTrackingSystem.src.UI.Menus.Admin
                 return;
             }
 
-            _userService.CreateUser(name, email, role);
-            Console.WriteLine("User created successfully.");
+            try
+            {
+                _userService.CreateUser(name, email, role);
+                Console.WriteLine("User created successfully!");
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
 
             Pause();
         }
@@ -79,22 +98,22 @@ namespace SmartIssueTrackingSystem.src.UI.Menus.Admin
             }
 
             Console.Write("User ID: ");
-            string input1 = Console.ReadLine() ?? throw new ArgumentNullException("ID cannot be null.");
+            var input1 = Console.ReadLine();
 
-            if (!Guid.TryParse(input1, out Guid id1))
+            if (!Guid.TryParse(input1, out Guid userId) || string.IsNullOrWhiteSpace(input1))
             {
                 Console.WriteLine("Invalid ID.");
                 Pause();
                 return;
             }
 
-            Guid id2 = Guid.Empty;
+            Guid newManagerId = Guid.Empty;
             if (role == 2)
             {
                 Console.Write("Replacing manager ID: ");
-                string input2 = Console.ReadLine() ?? throw new ArgumentNullException("ID cannot be null.");
+                var input2 = Console.ReadLine();
 
-                if (!Guid.TryParse(input2, out id2))
+                if (!Guid.TryParse(input2, out newManagerId) || string.IsNullOrWhiteSpace(input2))
                 {
                     Console.WriteLine("Invalid ID.");
                     Pause();
@@ -104,8 +123,19 @@ namespace SmartIssueTrackingSystem.src.UI.Menus.Admin
 
             var currentUser = _authService.GetCurrentUser();
 
-            _userLifecycle.DeleteUser(id1, id2, currentUser);
-            Console.WriteLine("User deleted successfully.");
+            try
+            {
+                _userLifecycle.DeleteUser(userId, newManagerId, currentUser);
+                Console.WriteLine("User deleted successfully!");
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
 
             Pause();
         }
@@ -123,10 +153,24 @@ namespace SmartIssueTrackingSystem.src.UI.Menus.Admin
         private void GetUserByEmail()
         {
             Console.Write("Email: ");
-            string email = Console.ReadLine() ?? throw new ArgumentNullException("Email cannot be null.");
+            var email = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                Console.WriteLine("Invalid email. Please try again.");
+                Pause();
+                return;
+            }
 
-            var user = _userService.GetByEmail(email);
-            Console.WriteLine(user.ToString() ?? "User not found.");
+            try
+            {
+                var user = _userService.GetByEmail(email);
+                Console.WriteLine(user);
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
             Pause();
         }
     }

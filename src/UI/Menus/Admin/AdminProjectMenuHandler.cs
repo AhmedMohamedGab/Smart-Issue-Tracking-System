@@ -45,16 +45,41 @@ namespace SmartIssueTrackingSystem.src.UI.Menus.Admin
         private void CreateProject()
         {
             Console.Write("Name: ");
-            string name = Console.ReadLine() ?? throw new ArgumentNullException("Name cannot be null.");
+            var name = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                Console.WriteLine("Invalid name. Please try again.");
+                Pause();
+                return;
+            }
 
             Console.Write("Description: ");
-            string description = Console.ReadLine() ?? throw new ArgumentNullException("Description cannot be null.");
+            var description = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(description))
+            {
+                Console.WriteLine("Invalid description. Please try again.");
+                Pause();
+                return;
+            }
 
             Console.Write("Manager email: ");
-            string managerEmail = Console.ReadLine() ?? throw new ArgumentNullException("Email cannot be null.");
+            var managerEmail = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(managerEmail))
+            {
+                Console.WriteLine("Invalid email. Please try again.");
+                Pause();
+                return;
+            }
 
-            _projectService.CreateProject(name, description, managerEmail);
-            Console.WriteLine("Project created successfully.");
+            try
+            {
+                _projectService.CreateProject(name, description, managerEmail);
+                Console.WriteLine("Project created successfully!");
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
 
             Pause();
         }
@@ -62,9 +87,9 @@ namespace SmartIssueTrackingSystem.src.UI.Menus.Admin
         private void ReassignProject()
         {
             Console.Write("Project ID: ");
-            string input1 = Console.ReadLine() ?? throw new ArgumentNullException("ID cannot be null.");
+            var input1 = Console.ReadLine();
 
-            if (!Guid.TryParse(input1, out Guid projectId))
+            if (!Guid.TryParse(input1, out Guid projectId) || string.IsNullOrWhiteSpace(input1))
             {
                 Console.WriteLine("Invalid ID.");
                 Pause();
@@ -72,9 +97,9 @@ namespace SmartIssueTrackingSystem.src.UI.Menus.Admin
             }
 
             Console.Write("New manager ID: ");
-            string input2 = Console.ReadLine() ?? throw new ArgumentNullException("ID cannot be null.");
+            var input2 = Console.ReadLine();
 
-            if (!Guid.TryParse(input2, out Guid newManagerId))
+            if (!Guid.TryParse(input2, out Guid newManagerId) || string.IsNullOrWhiteSpace(input2))
             {
                 Console.WriteLine("Invalid ID.");
                 Pause();
@@ -83,8 +108,19 @@ namespace SmartIssueTrackingSystem.src.UI.Menus.Admin
 
             var currentUser = _authService.GetCurrentUser();
 
-            _projectLifecycle.ReassignProject(projectId, newManagerId, currentUser);
-            Console.WriteLine("Project reassigned successfully.");
+            try
+            {
+                _projectLifecycle.ReassignProject(projectId, newManagerId, currentUser);
+                Console.WriteLine("Project reassigned successfully!");
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
 
             Pause();
         }
@@ -95,6 +131,9 @@ namespace SmartIssueTrackingSystem.src.UI.Menus.Admin
 
             foreach (var project in allProjects)
                 Console.WriteLine(project);
+
+            if (allProjects.Count() == 0)
+                Console.WriteLine("\nNo projects found.");
 
             Pause();
         }
