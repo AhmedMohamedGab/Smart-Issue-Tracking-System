@@ -66,15 +66,12 @@ namespace SmartIssueTrackingSystem.src.UI.Menus
             try
             {
                 _authService.Login(email);
+                Console.WriteLine("You logged in successfully!");
             }
             catch (InvalidOperationException ex)
             {
                 Console.WriteLine(ex.Message);
-                Pause();
-                return;
             }
-
-            Console.WriteLine("You logged in successfully.");
 
             Pause();
         }

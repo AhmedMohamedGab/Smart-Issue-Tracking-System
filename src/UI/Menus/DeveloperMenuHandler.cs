@@ -56,13 +56,25 @@ namespace SmartIssueTrackingSystem.src.UI.Menus
             Console.WriteLine("---------------------");
 
             Console.Write("Enter new name: ");
-            string name = Console.ReadLine() ?? throw new ArgumentNullException("Name cannot be null.");
+            var name = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                Console.WriteLine("Invalid name. Please try again.");
+                Pause();
+                return;
+            }
 
             Console.Write("Enter new email: ");
-            string email = Console.ReadLine() ?? throw new ArgumentNullException("Email cannot be null.");
+            var email = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                Console.WriteLine("Invalid email. Please try again.");
+                Pause();
+                return;
+            }
 
             _userService.EditInfo(name, email, currentUser);
-            Console.WriteLine("Info updated successfully.");
+            Console.WriteLine("Info updated successfully!");
 
             Pause();
         }
@@ -88,9 +100,9 @@ namespace SmartIssueTrackingSystem.src.UI.Menus
         private void ChangeIssueStatus()
         {
             Console.Write("Enter issue ID: ");
-            string input = Console.ReadLine() ?? throw new ArgumentNullException("ID cannot be null.");
+            var input = Console.ReadLine();
 
-            if (!Guid.TryParse(input, out Guid issueId))
+            if (!Guid.TryParse(input, out Guid issueId) || string.IsNullOrWhiteSpace(input))
             {
                 Console.WriteLine("Invalid ID.");
                 Pause();
@@ -108,8 +120,19 @@ namespace SmartIssueTrackingSystem.src.UI.Menus
 
             var currentUser = _authService.GetCurrentUser();
 
-            _issueService.ChangeStatus(issueId, newStatus, currentUser);
-            Console.WriteLine("Issue status updated successfully.");
+            try
+            {
+                _issueService.ChangeStatus(issueId, newStatus, currentUser);
+                Console.WriteLine("Issue status updated successfully!");
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
 
             Pause();
         }
