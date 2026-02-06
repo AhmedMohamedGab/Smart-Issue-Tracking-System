@@ -42,8 +42,8 @@ namespace SmartIssueTrackingSystem.src.UI.Menus.Manager
         private void OpenIssueCount()
         {
             Console.WriteLine("Project ID: ");
-            string input = Console.ReadLine() ?? throw new ArgumentNullException("ID cannot be null.");
-            if (!Guid.TryParse(input, out Guid projectId))
+            var input = Console.ReadLine();
+            if (!Guid.TryParse(input, out Guid projectId) || string.IsNullOrWhiteSpace(input))
             {
                 Console.WriteLine("Invalid ID.");
                 Pause();
@@ -52,8 +52,19 @@ namespace SmartIssueTrackingSystem.src.UI.Menus.Manager
 
             var currentUser = _authService.GetCurrentUser();
 
-            int openIssueCount = _reportingService.GetOpenIssueCountForProject(projectId, currentUser);
-            Console.WriteLine($"\nOpen issues for project [{projectId}]: {openIssueCount}");
+            try
+            {
+                int openIssueCount = _reportingService.GetOpenIssueCountForProject(projectId, currentUser);
+                Console.WriteLine($"\nOpen issues for project [{projectId}]: {openIssueCount}");
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
 
             Pause();
         }
@@ -61,8 +72,8 @@ namespace SmartIssueTrackingSystem.src.UI.Menus.Manager
         private void OverdueIssueCount()
         {
             Console.WriteLine("Project ID: ");
-            string input = Console.ReadLine() ?? throw new ArgumentNullException("ID cannot be null.");
-            if (!Guid.TryParse(input, out Guid projectId))
+            var input = Console.ReadLine();
+            if (!Guid.TryParse(input, out Guid projectId) || string.IsNullOrWhiteSpace(input))
             {
                 Console.WriteLine("Invalid ID.");
                 Pause();
@@ -71,8 +82,19 @@ namespace SmartIssueTrackingSystem.src.UI.Menus.Manager
 
             var currentUser = _authService.GetCurrentUser();
 
-            int overdueIssueCount = _reportingService.GetOverdueIssueCountForProject(projectId, currentUser);
-            Console.WriteLine($"\nOverdue issues for project [{projectId}]: {overdueIssueCount}");
+            try
+            {
+                int overdueIssueCount = _reportingService.GetOverdueIssueCountForProject(projectId, currentUser);
+                Console.WriteLine($"\nOverdue issues for project [{projectId}]: {overdueIssueCount}");
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
 
             Pause();
         }
@@ -80,8 +102,8 @@ namespace SmartIssueTrackingSystem.src.UI.Menus.Manager
         private void IssueCountByStatus()
         {
             Console.WriteLine("Project ID: ");
-            string input = Console.ReadLine() ?? throw new ArgumentNullException("ID cannot be null.");
-            if (!Guid.TryParse(input, out Guid projectId))
+            var input = Console.ReadLine();
+            if (!Guid.TryParse(input, out Guid projectId) || string.IsNullOrWhiteSpace(input))
             {
                 Console.WriteLine("Invalid ID.");
                 Pause();
@@ -90,9 +112,20 @@ namespace SmartIssueTrackingSystem.src.UI.Menus.Manager
 
             var currentUser = _authService.GetCurrentUser();
 
-            var issueCountByStatus = _reportingService.GetIssueCountByStatus(projectId, currentUser);
-            foreach (var statusCount in issueCountByStatus)
-                Console.WriteLine($"Status: {statusCount.Key}, Count: {statusCount.Value}");
+            try
+            {
+                var issueCountByStatus = _reportingService.GetIssueCountByStatus(projectId, currentUser);
+                foreach (var statusCount in issueCountByStatus)
+                    Console.WriteLine($"Status: {statusCount.Key}, Count: {statusCount.Value}");
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
 
             Pause();
         }
@@ -100,8 +133,8 @@ namespace SmartIssueTrackingSystem.src.UI.Menus.Manager
         private void ProjectProgress()
         {
             Console.WriteLine("Project ID: ");
-            string input = Console.ReadLine() ?? throw new ArgumentNullException("ID cannot be null.");
-            if (!Guid.TryParse(input, out Guid projectId))
+            var input = Console.ReadLine();
+            if (!Guid.TryParse(input, out Guid projectId) || string.IsNullOrWhiteSpace(input))
             {
                 Console.WriteLine("Invalid ID.");
                 Pause();
@@ -110,8 +143,19 @@ namespace SmartIssueTrackingSystem.src.UI.Menus.Manager
 
             var currentUser = _authService.GetCurrentUser();
 
-            double projectProgress = _reportingService.GetProjectProgress(projectId, currentUser);
-            Console.WriteLine($"\nProject progress for project [{projectId}]: {projectProgress:F2}%");
+            try
+            {
+                double projectProgress = _reportingService.GetProjectProgress(projectId, currentUser);
+                Console.WriteLine($"\nProject progress for project [{projectId}]: {projectProgress:F2}%");
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
 
             Pause();
         }

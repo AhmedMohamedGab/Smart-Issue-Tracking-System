@@ -46,10 +46,22 @@ namespace SmartIssueTrackingSystem.src.UI.Menus.Manager
         private void CreateIssue()
         {
             Console.Write("Title: ");
-            string title = Console.ReadLine() ?? throw new ArgumentNullException("Title cannot be null.");
+            var title = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(title))
+            {
+                Console.WriteLine("Invalid title. Please try again.");
+                Pause();
+                return;
+            }
 
             Console.Write("Description: ");
-            string description = Console.ReadLine() ?? throw new ArgumentNullException("Description cannot be null.");
+            var description = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(description))
+            {
+                Console.WriteLine("Invalid description. Please try again.");
+                Pause();
+                return;
+            }
 
             Console.Write("Priority:\n1.Low\n2.Medium\n3.High\n4.Critical\n");
             int priority = ReadChoice();
@@ -60,9 +72,9 @@ namespace SmartIssueTrackingSystem.src.UI.Menus.Manager
                 return;
             }
 
-            Console.Write("Due date (ex: 24-5-2026): ");
-            string input1 = Console.ReadLine() ?? throw new ArgumentNullException("Due date cannot be null.");
-            if (!DateTime.TryParse(input1, out DateTime dueDate))
+            Console.Write("Due date (ex: 24/05/2026): ");
+            var input1 = Console.ReadLine();
+            if (!DateTime.TryParse(input1, out DateTime dueDate) || string.IsNullOrWhiteSpace(input1))
             {
                 Console.WriteLine("Invalid date.");
                 Pause();
@@ -70,8 +82,8 @@ namespace SmartIssueTrackingSystem.src.UI.Menus.Manager
             }
 
             Console.Write("Project ID: ");
-            string input2 = Console.ReadLine() ?? throw new ArgumentNullException("ID cannot be null.");
-            if (!Guid.TryParse(input2, out Guid projectId))
+            var input2 = Console.ReadLine();
+            if (!Guid.TryParse(input2, out Guid projectId) || string.IsNullOrWhiteSpace(input2))
             {
                 Console.WriteLine("Invalid ID.");
                 Pause();
@@ -81,7 +93,7 @@ namespace SmartIssueTrackingSystem.src.UI.Menus.Manager
             Guid managerId = _authService.GetCurrentUser().Id;
 
             _issueService.CreateIssue(title, description, priority, dueDate, managerId, projectId);
-            Console.WriteLine("Issue created successfully.");
+            Console.WriteLine("Issue created successfully!");
 
             Pause();
         }
@@ -89,8 +101,8 @@ namespace SmartIssueTrackingSystem.src.UI.Menus.Manager
         private void AssignIssue()
         {
             Console.Write("Issue ID: ");
-            string input = Console.ReadLine() ?? throw new ArgumentNullException("ID cannot be null.");
-            if (!Guid.TryParse(input, out Guid issueId))
+            var input = Console.ReadLine();
+            if (!Guid.TryParse(input, out Guid issueId) || string.IsNullOrWhiteSpace(input))
             {
                 Console.WriteLine("Invalid ID.");
                 Pause();
@@ -98,12 +110,29 @@ namespace SmartIssueTrackingSystem.src.UI.Menus.Manager
             }
 
             Console.Write("Developer Email: ");
-            string developerEmail = Console.ReadLine() ?? throw new ArgumentNullException("Email cannot be null.");
+            var developerEmail = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(developerEmail))
+            {
+                Console.WriteLine("Invalid email. Please try again.");
+                Pause();
+                return;
+            }
 
             var currentUser = _authService.GetCurrentUser();
 
-            _issueService.AssignIssue(issueId, developerEmail, currentUser);
-            Console.WriteLine("Issue assigned successfully.");
+            try
+            {
+                _issueService.AssignIssue(issueId, developerEmail, currentUser);
+                Console.WriteLine("Issue assigned successfully!");
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
 
             Pause();
         }
@@ -111,8 +140,8 @@ namespace SmartIssueTrackingSystem.src.UI.Menus.Manager
         private void UnassignIssue()
         {
             Console.Write("Issue ID: ");
-            string input = Console.ReadLine() ?? throw new ArgumentNullException("ID cannot be null.");
-            if (!Guid.TryParse(input, out Guid issueId))
+            var input = Console.ReadLine();
+            if (!Guid.TryParse(input, out Guid issueId) || string.IsNullOrWhiteSpace(input))
             {
                 Console.WriteLine("Invalid ID.");
                 Pause();
@@ -121,8 +150,19 @@ namespace SmartIssueTrackingSystem.src.UI.Menus.Manager
 
             var currentUser = _authService.GetCurrentUser();
 
-            _issueService.UnassignIssue(issueId, currentUser);
-            Console.WriteLine("Issue unassigned successfully.");
+            try
+            {
+                _issueService.UnassignIssue(issueId, currentUser);
+                Console.WriteLine("Issue unassigned successfully!");
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
 
             Pause();
         }
@@ -130,17 +170,17 @@ namespace SmartIssueTrackingSystem.src.UI.Menus.Manager
         private void ChangeDuedate()
         {
             Console.Write("Issue ID: ");
-            string input1 = Console.ReadLine() ?? throw new ArgumentNullException("ID cannot be null.");
-            if (!Guid.TryParse(input1, out Guid issueId))
+            var input1 = Console.ReadLine();
+            if (!Guid.TryParse(input1, out Guid issueId) || string.IsNullOrWhiteSpace(input1))
             {
                 Console.WriteLine("Invalid ID.");
                 Pause();
                 return;
             }
 
-            Console.Write("Due date (ex: 24-5-2026): ");
-            string input2 = Console.ReadLine() ?? throw new ArgumentNullException("Due date cannot be null.");
-            if (!DateTime.TryParse(input2, out DateTime newDuedate))
+            Console.Write("Due date (ex: 24/05/2026): ");
+            var input2 = Console.ReadLine();
+            if (!DateTime.TryParse(input2, out DateTime newDuedate) || string.IsNullOrWhiteSpace(input2))
             {
                 Console.WriteLine("Invalid date.");
                 Pause();
@@ -149,8 +189,19 @@ namespace SmartIssueTrackingSystem.src.UI.Menus.Manager
 
             var currentUser = _authService.GetCurrentUser();
 
-            _issueService.ChangeDuedate(issueId, newDuedate, currentUser);
-            Console.WriteLine("Due date changed successfully.");
+            try
+            {
+                _issueService.ChangeDuedate(issueId, newDuedate, currentUser);
+                Console.WriteLine("Due date changed successfully!");
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
 
             Pause();
         }
@@ -158,8 +209,8 @@ namespace SmartIssueTrackingSystem.src.UI.Menus.Manager
         private void CloseIssue()
         {
             Console.Write("Issue ID: ");
-            string input = Console.ReadLine() ?? throw new ArgumentNullException("ID cannot be null.");
-            if (!Guid.TryParse(input, out Guid issueId))
+            var input = Console.ReadLine();
+            if (!Guid.TryParse(input, out Guid issueId) || string.IsNullOrWhiteSpace(input))
             {
                 Console.WriteLine("Invalid ID.");
                 Pause();
@@ -168,8 +219,19 @@ namespace SmartIssueTrackingSystem.src.UI.Menus.Manager
 
             var currentUser = _authService.GetCurrentUser();
 
-            _issueService.CloseIssue(issueId, currentUser);
-            Console.WriteLine("Issue closed successfully.");
+            try
+            {
+                _issueService.CloseIssue(issueId, currentUser);
+                Console.WriteLine("Issue closed successfully!");
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
 
             Pause();
         }
@@ -177,8 +239,8 @@ namespace SmartIssueTrackingSystem.src.UI.Menus.Manager
         private void DeleteIssue()
         {
             Console.Write("Issue ID: ");
-            string input = Console.ReadLine() ?? throw new ArgumentNullException("ID cannot be null.");
-            if (!Guid.TryParse(input, out Guid issueId))
+            var input = Console.ReadLine();
+            if (!Guid.TryParse(input, out Guid issueId) || string.IsNullOrWhiteSpace(input))
             {
                 Console.WriteLine("Invalid ID.");
                 Pause();
@@ -187,8 +249,19 @@ namespace SmartIssueTrackingSystem.src.UI.Menus.Manager
 
             var currentUser = _authService.GetCurrentUser();
 
-            _issueService.DeleteIssue(issueId, currentUser);
-            Console.WriteLine("Issue deleted successfully.");
+            try
+            {
+                _issueService.DeleteIssue(issueId, currentUser);
+                Console.WriteLine("Issue deleted successfully!");
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
 
             Pause();
         }

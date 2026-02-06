@@ -45,15 +45,34 @@ namespace SmartIssueTrackingSystem.src.UI.Menus.Manager
         private void CreateProject()
         {
             Console.Write("Name: ");
-            string name = Console.ReadLine() ?? throw new ArgumentNullException("Name cannot be null.");
+            var name = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                Console.WriteLine("Invalid name. Please try again.");
+                Pause();
+                return;
+            }
 
             Console.Write("Description: ");
-            string description = Console.ReadLine() ?? throw new ArgumentNullException("Description cannot be null.");
+            var description = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(description))
+            {
+                Console.WriteLine("Invalid description. Please try again.");
+                Pause();
+                return;
+            }
 
             string managerEmail = _authService.GetCurrentUser().Email;
 
-            _projectService.CreateProject(name, description, managerEmail);
-            Console.WriteLine("Project created successfully.");
+            try
+            {
+                _projectService.CreateProject(name, description, managerEmail);
+                Console.WriteLine("Project created successfully!");
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
 
             Pause();
         }
@@ -61,9 +80,9 @@ namespace SmartIssueTrackingSystem.src.UI.Menus.Manager
         private void RenameProject()
         {
             Console.Write("Project ID: ");
-            string input = Console.ReadLine() ?? throw new ArgumentNullException("ID cannot be null.");
+            var input = Console.ReadLine();
 
-            if (!Guid.TryParse(input, out Guid projectId))
+            if (!Guid.TryParse(input, out Guid projectId) || string.IsNullOrWhiteSpace(input))
             {
                 Console.WriteLine("Invalid ID.");
                 Pause();
@@ -71,12 +90,29 @@ namespace SmartIssueTrackingSystem.src.UI.Menus.Manager
             }
 
             Console.Write("New name: ");
-            string newName = Console.ReadLine() ?? throw new ArgumentNullException("Name cannot be null.");
+            var newName = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(newName))
+            {
+                Console.WriteLine("Invalid name. Please try again.");
+                Pause();
+                return;
+            }
 
             var currentUser = _authService.GetCurrentUser();
 
-            _projectService.RenameProject(projectId, newName, currentUser);
-            Console.WriteLine("Project renamed successfully.");
+            try
+            {
+                _projectService.RenameProject(projectId, newName, currentUser);
+                Console.WriteLine("Project renamed successfully!");
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
 
             Pause();
         }
@@ -84,9 +120,9 @@ namespace SmartIssueTrackingSystem.src.UI.Menus.Manager
         private void EndProject()
         {
             Console.Write("Project ID: ");
-            string input = Console.ReadLine() ?? throw new ArgumentNullException("ID cannot be null.");
+            var input = Console.ReadLine();
 
-            if (!Guid.TryParse(input, out Guid projectId))
+            if (!Guid.TryParse(input, out Guid projectId) || string.IsNullOrWhiteSpace(input))
             {
                 Console.WriteLine("Invalid ID.");
                 Pause();
@@ -95,8 +131,19 @@ namespace SmartIssueTrackingSystem.src.UI.Menus.Manager
 
             var currentUser = _authService.GetCurrentUser();
 
-            _projectLifecycle.EndProject(projectId, currentUser);
-            Console.WriteLine("Project ended successfully.");
+            try
+            {
+                _projectLifecycle.EndProject(projectId, currentUser);
+                Console.WriteLine("Project ended successfully!");
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
 
             Pause();
         }
