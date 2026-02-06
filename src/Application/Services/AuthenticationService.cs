@@ -23,7 +23,7 @@ namespace SmartIssueTrackingSystem.src.Application.Services
             => _currentUser = null;
 
         public User GetCurrentUser()
-            => _currentUser ?? throw new Exception("No user is currently logged in.");
+            => _currentUser ?? throw new InvalidOperationException("No user is currently logged in.");
 
         public bool IsAuthenticated()
             => _currentUser is not null;
