@@ -38,7 +38,7 @@ namespace SmartIssueTrackingSystem.src.Application.Services
 
         public void AssignManager(Guid issueId, Guid newManagerId, User currentUser)
         {
-            var issue = GetById(issueId);
+            var issue = GetById(issueId);   // Ensure the issue exists
             _userService.GetById(newManagerId);    // Ensure the new manager exists
 
             _auth.EnsureCanManageIssue(issue, currentUser);
@@ -49,8 +49,8 @@ namespace SmartIssueTrackingSystem.src.Application.Services
 
         public void AssignIssue(Guid issueId, string developerEmail, User currentUser)
         {
-            var issue = GetById(issueId);
-            var developer = _userService.GetByEmail(developerEmail);
+            var issue = GetById(issueId);   // Ensure the issue exists
+            var developer = _userService.GetByEmail(developerEmail);    // Ensure the developer exists
 
             _auth.EnsureCanManageIssue(issue, currentUser);
 
@@ -60,7 +60,7 @@ namespace SmartIssueTrackingSystem.src.Application.Services
 
         public void UnassignIssue(Guid issueId, User currentUser)
         {
-            var issue = GetById(issueId);
+            var issue = GetById(issueId);   // Ensure the issue exists
 
             _auth.EnsureCanManageIssue(issue, currentUser);
 
@@ -70,7 +70,7 @@ namespace SmartIssueTrackingSystem.src.Application.Services
 
         public void ChangeStatus(Guid issueId, int newStatus, User currentUser)
         {
-            var issue = GetById(issueId);
+            var issue = GetById(issueId);   // Ensure the issue exists
 
             _auth.EnsureCanChangeIssueStatus(issue, currentUser);
 
@@ -80,7 +80,7 @@ namespace SmartIssueTrackingSystem.src.Application.Services
 
         public void ChangeDuedate(Guid issueId, DateTime newDuedate, User currentUser)
         {
-            var issue = GetById(issueId);
+            var issue = GetById(issueId);   // Ensure the issue exists
 
             _auth.EnsureCanManageIssue(issue, currentUser);
 
@@ -90,7 +90,7 @@ namespace SmartIssueTrackingSystem.src.Application.Services
 
         public void CloseIssue(Guid issueId, User currentUser)
         {
-            var issue = GetById(issueId);
+            var issue = GetById(issueId);   // Ensure the issue exists
 
             _auth.EnsureCanManageIssue(issue, currentUser);
 
@@ -100,7 +100,7 @@ namespace SmartIssueTrackingSystem.src.Application.Services
 
         public void DeleteIssue(Guid issueId, User currentUser)
         {
-            var issue = GetById(issueId);
+            var issue = GetById(issueId);   // Ensure the issue exists
 
             _auth.EnsureCanManageIssue(issue, currentUser);
 
@@ -112,7 +112,7 @@ namespace SmartIssueTrackingSystem.src.Application.Services
 
         public IEnumerable<Issue> GetByProject(Guid projectId, User currentUser)
         {
-            var project = _projectService.GetById(projectId);
+            var project = _projectService.GetById(projectId);   // Ensure the project exists
 
             _auth.EnsureCanViewProjectIssues(project, currentUser);
 
@@ -198,6 +198,6 @@ namespace SmartIssueTrackingSystem.src.Application.Services
 
         public IEnumerable<Issue> GetOverdueIssues(Guid managerId)
             => _issueRepo.GetByManager(managerId)
-                .Where(i => i.DueDate < DateTime.UtcNow && i.CompletedAt is null);
+                .Where(i => i.IsOverdue());
     }
 }

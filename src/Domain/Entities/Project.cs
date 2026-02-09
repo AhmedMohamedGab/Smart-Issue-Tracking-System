@@ -6,7 +6,7 @@
         public string Description { get; private set; }
         public DateTime StartDate { get; private set; }
         public DateTime? EndDate { get; private set; }
-        public Guid ManagerId { get; private set; }
+        public Guid ManagerId { get; private set; } // The manager responsible for the project
 
         public Project(string name, string description, Guid managerId)
         {

@@ -15,8 +15,8 @@ namespace SmartIssueTrackingSystem.src.Application.Services
 
         public void Login(string email)
         {
-            var user = _userService.GetByEmail(email);
-            _currentUser = user;
+            var user = _userService.GetByEmail(email);  // Ensure the user exists
+            _currentUser = user;    // Login the user by setting the current user
         }
 
         public void Logout()
