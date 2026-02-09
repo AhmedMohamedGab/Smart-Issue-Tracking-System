@@ -22,7 +22,7 @@ namespace SmartIssueTrackingSystem.src.Application.Services
 
         public void CreateProject(string name, string description, string ManagerEmail)
         {
-            var manager = _userService.GetByEmail(ManagerEmail);
+            var manager = _userService.GetByEmail(ManagerEmail);    // Ensure the manager exists
 
             var newProject = new Project(name, description, manager.Id);
             _projectRepo.Add(newProject);
@@ -30,7 +30,7 @@ namespace SmartIssueTrackingSystem.src.Application.Services
 
         public void RenameProject(Guid projectId, string newName, User currentUser)
         {
-            var project = GetById(projectId);
+            var project = GetById(projectId);   // Ensure the project exists
 
             _auth.EnsureCanManageProject(project, currentUser);
 
@@ -40,7 +40,7 @@ namespace SmartIssueTrackingSystem.src.Application.Services
 
         public void AssignManager(Guid projectId, Guid newManagerId, User currentUser)
         {
-            var project = GetById(projectId);
+            var project = GetById(projectId);   // Ensure the project exists
             _userService.GetById(newManagerId); // Ensure the new manager exists
 
             _auth.EnsureCanManageProject(project, currentUser);
@@ -51,7 +51,7 @@ namespace SmartIssueTrackingSystem.src.Application.Services
 
         public void EndProject(Guid projectId, User currentUser)
         {
-            var project = GetById(projectId);
+            var project = GetById(projectId);   // Ensure the project exists
 
             _auth.EnsureCanManageProject(project, currentUser);
 
