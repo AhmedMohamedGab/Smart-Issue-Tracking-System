@@ -24,11 +24,15 @@
 
         internal void AssignTo(Guid managerId)
         {
+            if (EndDate is not null)
+                throw new InvalidOperationException("Cannot reassign a project that has already ended.");
             ManagerId = managerId;
         }
 
         internal void End()
         {
+            if (EndDate is not null)
+                throw new InvalidOperationException("Project is already ended.");
             EndDate = DateTime.UtcNow;
         }
     }
