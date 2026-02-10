@@ -16,8 +16,8 @@ namespace SmartIssueTrackingSystem.src.Application.Services
 
         public void CreateUser(string name, string email, int role)
         {
+            // Check if user with the same email already exists
             var user = _userRepo.GetByEmail(email);
-
             if (user is not null)
                 throw new InvalidOperationException("A user with this email already exists.");
 
