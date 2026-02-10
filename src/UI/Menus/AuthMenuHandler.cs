@@ -13,6 +13,14 @@ namespace SmartIssueTrackingSystem.src.UI.Menus
             _userService = userService;
         }
 
+        /// <summary>
+        /// Displays the main entry point for the user interface, handling initial system setup and user authentication.
+        /// </summary>
+        /// <remarks>
+        /// If no users exist in the system, this method creates a default administrator account
+        /// and prompts the user with initial credentials. The method then repeatedly prompts for user login until
+        /// authentication is successful or the application is exited.
+        /// </remarks>
         public void Show()
         {
             // Handle running system for the first time
@@ -52,6 +60,14 @@ namespace SmartIssueTrackingSystem.src.UI.Menus
             }
         }
 
+        /// <summary>
+        /// Attempts to log in a user by prompting for an email address and invoking the authentication service.
+        /// </summary>
+        /// <remarks>
+        /// Displays a prompt for the user's email address and validates the input. If the email is valid,
+        /// calls the authentication service to perform the login. Provides feedback to the user based on the
+        /// outcome of the login attempt.
+        /// </remarks>
         private void Login()
         {
             Console.Write("Enter your email: ");

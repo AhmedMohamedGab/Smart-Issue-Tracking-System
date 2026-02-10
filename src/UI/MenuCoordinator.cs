@@ -25,6 +25,14 @@ namespace SmartIssueTrackingSystem.src.UI
             _authService = authService;
         }
 
+        /// <summary>
+        /// Runs the main application loop, displaying authentication or routing menus based on the user's
+        /// authentication status.
+        /// </summary>
+        /// <remarks>
+        /// This method blocks the calling thread and does not return. It repeatedly checks the user's authentication
+        /// state and displays the appropriate menu. To stop the loop, the application must be terminated externally.
+        /// </remarks>
         public void Run()
         {
             while (true)
@@ -36,6 +44,13 @@ namespace SmartIssueTrackingSystem.src.UI
             }
         }
 
+        /// <summary>
+        /// Routes the current user to the appropriate menu based on their role.
+        /// </summary>
+        /// <remarks>
+        /// This method determines the user's role and displays the corresponding menu. Only one menu is shown
+        /// per invocation.
+        /// </remarks>
         private void RouteByRole()
         {
             switch (_authService.GetCurrentUser().Role.ToString())
