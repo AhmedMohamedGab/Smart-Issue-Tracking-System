@@ -10,9 +10,20 @@ namespace SmartIssueTrackingSystem.src.Domain.Entities
         public IssuePriority Priority { get; private set; }
         public DateTime DueDate { get; private set; }
 
-        public Guid ManagerId { get; private set; } // The manager responsible for overseeing the issue
-        public Guid? AssigneeId { get; private set; }   // The developer assigned to work on the issue (nullable, as it may be unassigned)
-        public Guid ProjectId { get; private set; } // The project this issue belongs to
+        /// <summary>
+        /// The unique identifier of the manager who created the issue.
+        /// </summary>
+        public Guid ManagerId { get; private set; }
+
+        /// <summary>
+        /// The unique identifier of the developer assigned to the issue, if any.
+        /// </summary>
+        public Guid? AssigneeId { get; private set; }
+
+        /// <summary>
+        /// The unique identifier of the project to which this issue belongs.
+        /// </summary>
+        public Guid ProjectId { get; private set; }
 
         public DateTime? CompletedAt { get; private set; }
 

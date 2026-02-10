@@ -15,7 +15,7 @@ namespace SmartIssueTrackingSystem.src.Domain.Entities
             Role = role;
         }
 
-        public void EditInfo(string name, string email)
+        internal void EditInfo(string name, string email)
         {
             Name = name;
             Email = email;
