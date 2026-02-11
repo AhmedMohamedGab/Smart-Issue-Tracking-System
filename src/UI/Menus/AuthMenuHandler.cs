@@ -56,6 +56,10 @@ namespace SmartIssueTrackingSystem.src.UI.Menus
                     case 0:
                         Environment.Exit(0);
                         break;
+                    default:
+                        Console.WriteLine("Invalid choice. Please try again.");
+                        Pause();
+                        break;
                 }
             }
         }

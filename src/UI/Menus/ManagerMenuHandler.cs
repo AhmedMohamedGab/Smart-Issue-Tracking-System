@@ -47,7 +47,7 @@ namespace SmartIssueTrackingSystem.src.UI.Menus
                     case 3: _manageIssuesMenu.Show(); break;
                     case 4: _viewIssuesMenu.Show(); break;
                     case 5: _reportsMenu.Show(); break;
-                    case 0: _authService.Logout(); break;
+                    case 0: _authService.Logout(); return;
                     default:
                         Console.WriteLine("Invalid choice. Please try again.");
                         Pause();
