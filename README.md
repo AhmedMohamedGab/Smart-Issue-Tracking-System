@@ -120,21 +120,27 @@ dotnet run --project SmartIssueTrackingSystem.csproj
 
 ## Screenshots
 - Login Screen:
+
 ![Login Screen](assets/login_screen.png)
 
 - Admin Creates User:
+
 ![Admin Creates User](assets/admin_creates_user.png)
 
 - Manager Creates Project:
+
 ![Manager Creates Project](assets/manager_creates_project.png)
 
 - Manager Creates Issue:
+
 ![Manager Creates Issue](assets/manager_creates_issue.png)
 
 - Manager Assigns Issue:
+
 ![Manager Assigns Issue](assets/manager_assigns_issue.png)
 
 - Developer Views Workload:
+
 ![Developer Views Workload](assets/developer_views_workload.png)
 
 ## Future Improvements
