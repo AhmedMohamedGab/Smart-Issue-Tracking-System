@@ -110,6 +110,8 @@ git clone https://github.com/AhmedMohamedGab/Smart-Issue-Tracking-System.git
 dotnet run --project SmartIssueTrackingSystem.csproj
 ```
 
+---
+
 ## Usage
 1. Start the application
 2. Log in using an existing user email
@@ -117,6 +119,8 @@ dotnet run --project SmartIssueTrackingSystem.csproj
 4. Perform actions based on your role (Admin / Manager / Developer)
 5. Log out or exit safely
 > All invalid operations are handled gracefully through user-friendly console messages.
+
+---
 
 ## Screenshots
 - Login Screen:
@@ -143,6 +147,8 @@ dotnet run --project SmartIssueTrackingSystem.csproj
 
 ![Developer Views Workload](assets/developer_views_workload.png)
 
+---
+
 ## Future Improvements
 - Unit and integration testing
 - Password hashing and secure authentication
@@ -152,9 +158,13 @@ dotnet run --project SmartIssueTrackingSystem.csproj
 - Export reports to files
 - REST API version of the system
 
+---
+
 ## License
 This project is licensed under the **MIT License**.
 See the `LICENSE.txt` file for details.
+
+---
 
 ## Contributing
 Contributions are welcome! Please follow these steps:
