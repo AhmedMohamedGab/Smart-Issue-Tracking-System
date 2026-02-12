@@ -119,12 +119,23 @@ dotnet run --project SmartIssueTrackingSystem.csproj
 > All invalid operations are handled gracefully through user-friendly console messages.
 
 ## Screenshots
+- Login Screen:
 ![Login Screen](assets/login_screen.png)
-![Admin Menu](assets/admin_menu.png)
-![Manager Menu](assets/manager_menu.png)
-![Developer Menu](assets/developer_menu.png)
-![Project Overview](assets/project_overview.png)
-![Issue Details](assets/issue_details.png)
+
+- Admin Creates User:
+![Admin Creates User](assets/admin_creates_user.png)
+
+- Manager Creates Project:
+![Manager Creates Project](assets/manager_creates_project.png)
+
+- Manager Creates Issue:
+![Manager Creates Issue](assets/manager_creates_issue.png)
+
+- Manager Assigns Issue:
+![Manager Assigns Issue](assets/manager_assigns_issue.png)
+
+- Developer Views Workload:
+![Developer Views Workload](assets/developer_views_workload.png)
 
 ## Future Improvements
 - Unit and integration testing
