@@ -72,7 +72,7 @@ namespace SmartIssueTrackingSystem.src.UI.Menus.Manager
                 return;
             }
 
-            Console.Write("Due date (ex: 24/05/2026): ");
+            Console.Write("Due date (ex: 05/24/2026): ");
             var input1 = Console.ReadLine();
             if (!DateTime.TryParse(input1, out DateTime dueDate) || string.IsNullOrWhiteSpace(input1))
             {
@@ -178,7 +178,7 @@ namespace SmartIssueTrackingSystem.src.UI.Menus.Manager
                 return;
             }
 
-            Console.Write("Due date (ex: 24/05/2026): ");
+            Console.Write("Due date (ex: 05/24/2026): ");
             var input2 = Console.ReadLine();
             if (!DateTime.TryParse(input2, out DateTime newDuedate) || string.IsNullOrWhiteSpace(input2))
             {

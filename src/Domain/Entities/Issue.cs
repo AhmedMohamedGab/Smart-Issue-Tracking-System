@@ -111,5 +111,19 @@ namespace SmartIssueTrackingSystem.src.Domain.Entities
 
             return false;
         }
+
+        public override string ToString()
+        {
+            return $"\n- Title: {Title}\n" +
+                $"\t- Description: {Description}\n" +
+                $"\t- Issue ID: {Id}\n" +
+                $"\t- Status: {Status}\n" +
+                $"\t- Priority: {Priority}\n" +
+                $"\t- DueDate: {DueDate}\n" +
+                $"\t- ManagerId: {ManagerId}\n" +
+                $"\t- AssigneeId: {(AssigneeId.HasValue ? AssigneeId.Value.ToString() : "Unassigned")}\n" +
+                $"\t- ProjectId: {ProjectId}\n" +
+                $"\t- CompletedAt: {(CompletedAt.HasValue ? CompletedAt.Value.ToString() : "Not completed")}";
+        }
     }
 }

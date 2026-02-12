@@ -20,5 +20,13 @@ namespace SmartIssueTrackingSystem.src.Domain.Entities
             Name = name;
             Email = email;
         }
+
+        public override string ToString()
+        {
+            return $"\n- User: {Name}\n" +
+                $"\t- Email: {Email}\n" +
+                $"\t- Role: {Role}\n" +
+                $"\t- ID: {Id}";
+        }
     }
 }

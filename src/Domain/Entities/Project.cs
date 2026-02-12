@@ -39,5 +39,15 @@
                 throw new InvalidOperationException("Project is already ended.");
             EndDate = DateTime.UtcNow;
         }
+
+        public override string ToString()
+        {
+            return $"\n- Name: {Name}\n" +
+                $"\t- Description: {Description}\n" +
+                $"\t- Project ID: {Id}\n" +
+                $"\t- ManagerId: {ManagerId}\n" +
+                $"\t- StartDate: {StartDate}\n" +
+                $"\t- EndDate: {(EndDate.HasValue ? EndDate.Value.ToString() : "Ongoing")}";
+        }
     }
 }
